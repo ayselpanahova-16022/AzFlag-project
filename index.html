@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Azerbaijan Flag</title>
+  <style>
+    body {
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      border: 2px solid black;
+    }
+  </style>
+</head>
+<body>
+<canvas id="flagCanvas"></canvas>
+
+<script>
+  function resizeCanvas() {
+    const canvas = document.getElementById('flagCanvas');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    drawFlag();
+  }
+
+  function drawFlag() {
+    const canvas = document.getElementById('flagCanvas');
+    const ctx = canvas.getContext('2d');
+
+    const colors = ['#00B1EB', '#ED2939', '#3A9D23'];
+    const stripeHeight = canvas.height / colors.length;
+
+    colors.forEach((color, index) => {
+      ctx.fillStyle = color;
+      ctx.fillRect(0, index * stripeHeight, canvas.width, stripeHeight);
+    });
+
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const scale = Math.min(canvas.width / 600, canvas.height / 300);
+
+    // Draw crescent
+    ctx.fillStyle = '#FFFFFF';
+    ctx.beginPath();
+    ctx.arc(centerX - 20 * scale, centerY, 50 * scale, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = '#ED2939';
+    ctx.beginPath();
+    ctx.arc(centerX - 5 * scale, centerY, 40 * scale, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Draw star
+    ctx.fillStyle = '#FFFFFF';
+    drawStar(ctx, centerX + 30 * scale, centerY, 8, 25 * scale, 14 * scale);
+  }
+
+  function drawStar(ctx, cx, cy, spikes, outerRadius, innerRadius) {
+    const step = Math.PI / spikes;
+    ctx.beginPath();
+
+    for (let i = 0; i < spikes * 2; i++) {
+      const radius = i % 2 === 0 ? outerRadius : innerRadius;
+      const angle = i * step - Math.PI / 2;
+      const x = cx + Math.cos(angle) * radius;
+      const y = cy + Math.sin(angle) * radius;
+      ctx.lineTo(x, y);
+    }
+
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+</script>
+</body>
+</html>
